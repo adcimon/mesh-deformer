@@ -13,10 +13,10 @@ public struct MeshDeformerJob : IJobParallelFor
     public float radius;
     public float force;
 
-    public NativeArray<Vector3> vertices;
-
     [ReadOnly]
     public NativeArray<Vector3> normals;
+
+    public NativeArray<Vector3> vertices;
 
     public void Execute( int index )
     {
