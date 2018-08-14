@@ -7,14 +7,12 @@ public struct MeshDeformerJob : IJobParallelFor
     // Delta time must be copied to the job since jobs generally don't have concept of a frame.
     // The main thread waits for the job same frame or next frame, but the job should do work deterministically
     // independent on when the job happens to run on the worker threads.
-    public float deltaTime;
+    [ReadOnly] public float deltaTime;
 
-    public Vector3 center;
-    public float radius;
-    public float force;
-
-    [ReadOnly]
-    public NativeArray<Vector3> normals;
+    [ReadOnly] public Vector3 center;
+    [ReadOnly] public float radius;
+    [ReadOnly] public float force;
+    [ReadOnly] public NativeArray<Vector3> normals;
 
     public NativeArray<Vector3> vertices;
 
