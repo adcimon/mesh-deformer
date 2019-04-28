@@ -5,17 +5,17 @@ ModelImporter:
   fileIDToRecycleName:
     100000: //RootNode
     100002: default
-    100004: bunny
+    100004: Bunny
     400000: //RootNode
     400002: default
-    400004: bunny
+    400004: Bunny
     2100000: defaultMat
     2300000: default
-    2300002: bunny
+    2300002: Bunny
     3300000: default
-    3300002: bunny
+    3300002: Bunny
     4300000: default
-    4300002: bunny
+    4300002: Bunny
   externalObjects: {}
   materials:
     importMaterials: 0
