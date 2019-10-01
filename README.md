@@ -6,9 +6,7 @@ Mesh deformation using the Unity Job System.
   <img align="center" src="example.gif" title="Beware the mutant bunnies."><br>
 </p>
 
-This project is a proof of concept application that deforms a mesh using the new Unity Job System and is made with Unity 2018.2.0f2.
-
-The <a href="https://docs.unity3d.com/Manual/JobSystem.html">Unity Job System</a> is a way to write <a href="https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)">multithreaded</a> code in the CPU providing high performance boost to the games using it. It is integrated with the Unity’s native job system which creates a thread per CPU core and manages small units of work named jobs. This design avoids the thread context switches that cause a waste of CPU resources.<br>
+This project is a proof of concept application that deforms a mesh using the new Unity Job System and is made with Unity 2018.2.0f2. The <a href="https://docs.unity3d.com/Manual/JobSystem.html">Unity Job System</a> is a way to write <a href="https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)">multithreaded</a> code in the CPU providing high performance boost to the games using it. It is integrated with the Unity’s native job system which creates a thread per CPU core and manages small units of work named jobs. This design avoids the thread context switches that cause a waste of CPU resources.<br>
 
 To create a new job you need to implement one interface corresponding to the type of job you want to execute. There are several types of jobs, `IJob`, `IJobParallelFor` and `IJobParallelForTransform` are the most common. The basic one, `IJob`, allows you to execute the code in the secondary threads. It is also very common to want to execute the same operations on large collections of data, for this task you have the job `IJobParallelFor` (which is the one used in this example). The last one, `IJobParallelForTransform`, is another parallel job that is designed for operations using `Transform` components.<br>
 
@@ -78,10 +76,10 @@ public class MeshDeformer : MonoBehaviour
 
     private void Start()
     {
-        mesh = gameObject.GetComponent&lt;MeshFilter&gt;().mesh;
+        mesh = gameObject.GetComponent<MeshFilter>().mesh;
         mesh.MarkDynamic();
 
-        meshCollider = gameObject.GetComponent&lt;MeshCollider&gt;();
+        meshCollider = gameObject.GetComponent<MeshCollider>();
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = mesh;
 
