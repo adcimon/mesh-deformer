@@ -44,7 +44,7 @@ public struct MeshDeformerJob : IJobParallelFor
     [ReadOnly] public float force;
     [ReadOnly] public NativeArray<Vector3> normals;
 
-    public NativeArray&lt;Vector3&gt; vertices;
+    public NativeArray<Vector3> vertices;
 
     public void Execute( int index )
     {
