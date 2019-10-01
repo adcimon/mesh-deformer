@@ -20,7 +20,6 @@ using UnityEngine.Jobs;
 using Unity.Collections;
 using Unity.Jobs;
 ```
-<br>
 
 The job that performs the vertex displacement is an `IJobParallelFor` job and receives the following inputs:
 <ul>
@@ -61,7 +60,6 @@ public struct MeshDeformerJob : IJobParallelFor
     }
 }
 ```
-<br>
 
 The execution of this job is performed in the `MeshDeformer.cs` script after the helper class `Pointer.cs` calls it when the mouse button is pressed. The class declares 2 native arrays for the normals and vertices and a `Mesh` that will be shared by the `MeshFilter` and the `MeshCollider`.<br>
 
@@ -94,7 +92,6 @@ public class MeshDeformer : MonoBehaviour
     // ...
 }
 ```
-<br>
 
 Each time the method `public void Deform( Vector3 point, float radius, float force )` is called, the job is scheduled for execution.<br>
 
@@ -112,7 +109,6 @@ public void Deform( Vector3 point, float radius, float force )
     handle = job.Schedule(vertices.Length, 64);
 }
 ```
-<br>
 
 The job is completed in the `LateUpdate`, the vertices are copied from the job's native array to the mesh and the bounds are recalculated.<br>
 ```
@@ -124,7 +120,6 @@ private void LateUpdate()
     mesh.RecalculateBounds();
 }
 ```
-<br>
 
 Lastly, don't forget to free resources when the process is done, remember that the native collections are not managed.
 ```
@@ -134,7 +129,6 @@ private void OnDestroy()
     normals.Dispose();
 }
 ```
-<br>
 
 References.
 > <a href="https://docs.unity3d.com/Manual/JobSystem.html">Unity Manual: C# Job System</a><br>
