@@ -85,11 +85,11 @@ public class MeshDeformer : MonoBehaviour
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = mesh;
 
-        vertices = new NativeArray&lt;Vector3&gt;(mesh.vertices, Allocator.Persistent);
-        normals = new NativeArray&lt;Vector3&gt;(mesh.normals, Allocator.Persistent);
+        vertices = new NativeArray<Vector3>(mesh.vertices, Allocator.Persistent);
+        normals = new NativeArray<Vector3>(mesh.normals, Allocator.Persistent);
     }
 
-    // ...
+    ...
 }
 ```
 
