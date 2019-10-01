@@ -42,7 +42,7 @@ public struct MeshDeformerJob : IJobParallelFor
     [ReadOnly] public Vector3 center;
     [ReadOnly] public float radius;
     [ReadOnly] public float force;
-    [ReadOnly] public NativeArray&lt;Vector3&gt; normals;
+    [ReadOnly] public NativeArray<Vector3> normals;
 
     public NativeArray&lt;Vector3&gt; vertices;
 
@@ -71,8 +71,8 @@ public class MeshDeformer : MonoBehaviour
     private Mesh mesh;
     private MeshCollider meshCollider;
 
-    private NativeArray&lt;Vector3&gt; vertices;
-    private NativeArray&lt;Vector3&gt; normals;
+    private NativeArray<Vector3> vertices;
+    private NativeArray<Vector3> normals;
 
     private bool scheduled = false;
     private MeshDeformerJob job;
