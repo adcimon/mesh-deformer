@@ -1,4 +1,4 @@
-# Unity Job System: Mesh Deformer
+# Mesh Deformer
 
 Mesh deformation using the Unity Job System.
 
