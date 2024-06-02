@@ -3,7 +3,7 @@
 Mesh deformation using the Unity Job System.
 
 <p align="center">
-  <img align="center" src="example.gif" title="Beware the mutant bunnies."><br>
+	<img align="center" src="example.gif" title="Beware the mutant bunnies."><br>
 </p>
 
 This project is a proof of concept application that deforms a mesh using the new Unity Job System. The <a href="https://docs.unity3d.com/Manual/JobSystem.html">Unity Job System</a> is a way to write <a href="https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)">multithreaded</a> code in the CPU providing high performance boost to the games using it. It is integrated with the Unity’s native job system which creates a thread per CPU core and manages small units of work named jobs. This design avoids the thread context switches that cause a waste of CPU resources.<br>
@@ -21,12 +21,12 @@ using Unity.Jobs;
 
 The job that performs the vertex displacement is an `IJobParallelFor` job and receives the following inputs:
 <ul>
-  <li><strong>deltaTime</strong>. Time in seconds it took to complete the last frame.</li>
-  <li><strong>center</strong>. Center of the sphere.</li>
-  <li><strong>radius</strong>. Radius of the sphere.</li>
-  <li><strong>force</strong>. Force that is going to be applied to offset the vertices.</li>
-  <li><strong>normals</strong>. The normal for each vertex to obtain the displacement direction (read only).</li>
-  <li><strong>vertices</strong>. The vertex positions that are going to be updated.</li>
+	<li><strong>deltaTime</strong>. Time in seconds it took to complete the last frame.</li>
+	<li><strong>center</strong>. Center of the sphere.</li>
+	<li><strong>radius</strong>. Radius of the sphere.</li>
+	<li><strong>force</strong>. Force that is going to be applied to offset the vertices.</li>
+	<li><strong>normals</strong>. The normal for each vertex to obtain the displacement direction (read only).</li>
+	<li><strong>vertices</strong>. The vertex positions that are going to be updated.</li>
 </ul>
 
 It is also important to highlight that the delta time must be copied because the jobs are <a href="https://en.wikipedia.org/wiki/Asynchrony_(computer_programming)">asynchronous</a> and don't have the concept of frame.
@@ -35,27 +35,27 @@ The operation that is executed is a vertex inside sphere check and a displacemen
 ```
 public struct MeshDeformerJob : IJobParallelFor
 {
-    [ReadOnly] public float deltaTime;
-    [ReadOnly] public Vector3 center;
-    [ReadOnly] public float radius;
-    [ReadOnly] public float force;
-    [ReadOnly] public NativeArray<Vector3> normals;
+	[ReadOnly] public float deltaTime;
+	[ReadOnly] public Vector3 center;
+	[ReadOnly] public float radius;
+	[ReadOnly] public float force;
+	[ReadOnly] public NativeArray<Vector3> normals;
 
-    public NativeArray<Vector3> vertices;
+	public NativeArray<Vector3> vertices;
 
-    public void Execute( int index )
-    {
-        Vector3 vertex = vertices[index];
+	public void Execute(int index)
+	{
+		Vector3 vertex = vertices[index];
 
-        float a = Mathf.Pow(vertex.x - center.x, 2);
-        float b = Mathf.Pow(vertex.y - center.y, 2);
-        float c = Mathf.Pow(vertex.z - center.z, 2);
-        if( a + b + c < Mathf.Pow(radius, 2) )
-        {
-            vertex += normals[index] * force * deltaTime;
-            vertices[index] = vertex;
-        }
-    }
+		float a = Mathf.Pow(vertex.x - center.x, 2);
+		float b = Mathf.Pow(vertex.y - center.y, 2);
+		float c = Mathf.Pow(vertex.z - center.z, 2);
+		if (a + b + c < Mathf.Pow(radius, 2))
+		{
+			vertex += normals[index] * force * deltaTime;
+			vertices[index] = vertex;
+		}
+	}
 }
 ```
 
@@ -64,47 +64,47 @@ The execution of this job is performed in the `MeshDeformer.cs` script after the
 ```
 public class MeshDeformer : MonoBehaviour
 {
-    private Mesh mesh;
-    private MeshCollider meshCollider;
+	private Mesh mesh;
+	private MeshCollider meshCollider;
 
-    private NativeArray<Vector3> vertices;
-    private NativeArray<Vector3> normals;
+	private NativeArray<Vector3> vertices;
+	private NativeArray<Vector3> normals;
 
-    private bool scheduled = false;
-    private MeshDeformerJob job;
-    private JobHandle handle;
+	private bool scheduled = false;
+	private MeshDeformerJob job;
+	private JobHandle handle;
 
-    private void Start()
-    {
-        mesh = gameObject.GetComponent<MeshFilter>().mesh;
-        mesh.MarkDynamic();
+	private void Start()
+	{
+		mesh = gameObject.GetComponent<MeshFilter>().mesh;
+		mesh.MarkDynamic();
 
-        meshCollider = gameObject.GetComponent<MeshCollider>();
-        meshCollider.sharedMesh = null;
-        meshCollider.sharedMesh = mesh;
+		meshCollider = gameObject.GetComponent<MeshCollider>();
+		meshCollider.sharedMesh = null;
+		meshCollider.sharedMesh = mesh;
 
-        vertices = new NativeArray<Vector3>(mesh.vertices, Allocator.Persistent);
-        normals = new NativeArray<Vector3>(mesh.normals, Allocator.Persistent);
-    }
+		vertices = new NativeArray<Vector3>(mesh.vertices, Allocator.Persistent);
+		normals = new NativeArray<Vector3>(mesh.normals, Allocator.Persistent);
+	}
 
-    ...
+	...
 }
 ```
 
-Each time the method `public void Deform( Vector3 point, float radius, float force )` is called, the job is scheduled for execution.<br>
+Each time the method `public void Deform(Vector3 point, float radius, float force)` is called, the job is scheduled for execution.<br>
 
 ```
-public void Deform( Vector3 point, float radius, float force )
+public void Deform(Vector3 point, float radius, float force)
 {
-    job = new MeshDeformerJob();
-    job.deltaTime = Time.deltaTime;
-    job.center = transform.InverseTransformPoint(point);
-    job.radius = radius;
-    job.force = force;
-    job.vertices = vertices;
-    job.normals = normals;
+	job = new MeshDeformerJob();
+	job.deltaTime = Time.deltaTime;
+	job.center = transform.InverseTransformPoint(point);
+	job.radius = radius;
+	job.force = force;
+	job.vertices = vertices;
+	job.normals = normals;
 
-    handle = job.Schedule(vertices.Length, 64);
+	handle = job.Schedule(vertices.Length, 64);
 }
 ```
 
@@ -112,10 +112,10 @@ The job is completed in the `LateUpdate`, the vertices are copied from the job's
 ```
 private void LateUpdate()
 {
-    handle.Complete();
-    job.vertices.CopyTo(vertices);
-    mesh.vertices = vertices.ToArray();
-    mesh.RecalculateBounds();
+	handle.Complete();
+	job.vertices.CopyTo(vertices);
+	mesh.vertices = vertices.ToArray();
+	mesh.RecalculateBounds();
 }
 ```
 
@@ -123,8 +123,8 @@ Lastly, don't forget to free resources when the process is done, remember that t
 ```
 private void OnDestroy()
 {
-    vertices.Dispose();
-    normals.Dispose();
+	vertices.Dispose();
+	normals.Dispose();
 }
 ```
 
